@@ -251,6 +251,13 @@ func (r *stdRows) Next(dest []driver.Value) error {
 				}
 				dest[i] = v
 			default:
+				vi := reflect.ValueOf(value)
+				if vi.Kind() == reflect.Ptr {
+					if !vi.IsNil() {
+						dest[i] = vi.Elem().Interface()
+						continue
+					}
+				}
 				dest[i] = value
 			}
 		}
